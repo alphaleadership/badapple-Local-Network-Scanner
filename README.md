@@ -1,2 +1,3 @@
 # Local Network Scanner
-(soon)
+
+This Bad Apple is: BadApple #LNS002
