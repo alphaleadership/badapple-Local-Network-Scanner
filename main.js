@@ -8,7 +8,7 @@ const { networkInterfaces } = require('os');
 
 // Server side, only need to listen on the local network
 
-let server = net.createServer(function(socket) {
+let server = net.createServer((socket) => {
     console.log('~ New client on the network '+socket.remoteAddress);
 	socket.write('Welcome to the Blanche Neige server !');
 	socket.pipe(socket);
@@ -50,7 +50,7 @@ let clientOnlineList = []
 for(let i = 0; i < ipRange.length; i++){
     //try to connect to the ip
     let client = new net.Socket();
-    client.connect(12645, ipRange[i], function() {
+    client.connect(12645, ipRange[i], () => {
         console.log("+ "+ipRange[i] +" is responding")
         let checkAll = clientOnlineList.find(x => x.ip == ipRange[i])
         if(!checkAll){
@@ -60,10 +60,10 @@ for(let i = 0; i < ipRange.length; i++){
             })
         }
     });
-    client.on('close', function() {
+    client.on('close', () => {
         client.destroy();
     });
-    client.on('error', function(err) {
+    client.on('error', (err) => {
         client.destroy();
     });
 }
@@ -72,7 +72,7 @@ upServer()
 
 
 // ALL the function stuff. Not really funny.
-function showAllNetworkInt(){
+const showAllNetworkInt = () => {
     console.log(`~ Find ${ipv4_data.length} network interface`)
     for(let i=0; i<ipv4_data.length; i++){
         console.log("- "+ipv4_data[i].name + " : " + ipv4_data[i].address + " / " + ipv4_data[i].mask + " (" + ipv4_data[i].class + ")");
@@ -80,7 +80,7 @@ function showAllNetworkInt(){
     console.log("")
 }
 
-function detectLocalIpClass(ip){
+const detectLocalIpClass = (ip) => {
     if(ip.startsWith("10.")){
         return "A"
     } else if(ip.startsWith("172.")){
@@ -94,7 +94,7 @@ function detectLocalIpClass(ip){
     }
 }
 
-function calcIpRange(ip, mask){
+const calcIpRange = (ip, mask) => {
     let ip_range = []
     let ip_range_start = ip.split(".")
     let ip_range_end = ip.split(".")
@@ -109,7 +109,7 @@ function calcIpRange(ip, mask){
     return ip_range
 }
 
-function whereToCut(mask){
+const whereToCut = (mask) => {
     let res = (32 - mask)/8
     //check si pas de virgule
     if(res.toString().includes(".")){
@@ -118,7 +118,7 @@ function whereToCut(mask){
     return res
 }
 
-function genAllIpToCheck(ip_range, my_ip){
+const genAllIpToCheck = (ip_range, my_ip) => {
     let res = []
     let ip_range_start = setAllNum(ip_range[0].split("."))
     let cut = ip_range[2]
@@ -147,7 +147,7 @@ function genAllIpToCheck(ip_range, my_ip){
     return res
 }
 
-function getAllTheRange(deb){
+const getAllTheRange = (deb) => {
     let res = []
     for(let i=deb; i<256; i++){
         res.push(i)
@@ -155,26 +155,26 @@ function getAllTheRange(deb){
     return res
 }
 
-function setAllNum(array){
+const setAllNum = (array) => {
     for(let i=0; i<array.length; i++){
         array[i] = Number(array[i])
     }
     return array
 }
 
-function getFirstIpOfip(ip){
+const getFirstIpOfip = (ip) => {
     return Number(ip.split(".")[0])
 }
 
 // ALL listeners stuff
 
-function clientStuff(){
+const clientStuff = () => {
     console.log(`~ Total online client: ${clientOnlineList.length}`)
 
     //DO SOMETHING WITH THE CLIENT
 }
 
-function upServer(){
+const upServer = () => {
     setTimeout(() => {
         clientStuff()
     } , 5000);
